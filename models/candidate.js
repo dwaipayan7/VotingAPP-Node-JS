@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const User = require('./user');
 
 const candidateSchema = new mongoose.Schema({
     name:{
@@ -7,11 +8,11 @@ const candidateSchema = new mongoose.Schema({
     },
     party: {
         type: String,
-        required: true
+        required: true,
     },
     age: {
         type: Number,
-        required: true
+        required: true,
     },
     votes: [
         {

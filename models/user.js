@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-       
     },
     mobile: {
         type: String
@@ -32,7 +31,7 @@ const userSchema = new mongoose.Schema({
     role:{
         type: String,
         enum: ['voter', 'admin'],
-        default: 'voter'
+        default: 'voter',
     },
     isVoted: {
         type: Boolean,
