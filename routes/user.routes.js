@@ -52,7 +52,8 @@ router.post('/login', async (req, res) => {
 // Profile route (JWT protected)
 router.get('/profile', jwtAuthMiddleware, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userData = req.user;
+    const userId = userData.id;
     const user = await User.findById(userId);
     res.status(200).json({ user });
   } catch (error) {
