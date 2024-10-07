@@ -1,39 +1,33 @@
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
 
-dotenv.config();
-
-
-// JWT authentication middleware
 const jwtAuthMiddleware = (req, res, next) => {
 
-    // Extract token from authorization header
-    const authorization = req.headers.authorization;
-    
-    if (!authorization || !authorization.startsWith('Bearer ')) {
-        return res.status(401).json({ error: "Token Not Found" });
-    }
+    // first check request headers has authorization or not
+    const authorization = req.headers.authorization
+    if(!authorization) return res.status(401).json({ error: 'Token Not Found' });
 
-    const token = authorization.split(' ')[1]; // Extract the token after 'Bearer'
+    // Extract the jwt token from the request headers
+    const token = req.headers.authorization.split(' ')[1];
+    if(!token) return res.status(401).json({ error: 'Unauthorized' });
 
-    if (!token) {
-        return res.status(401).json({ error: "Unauthorized: No token found" });
-    }
-
-    try {
-        // Verify token using the JWT_SECRET
+    try{
+        // Verify the JWT token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded; // Store the decoded user info in req object
+
+        // Attach user information to the request object
+        req.user = decoded
         next();
-    } catch (error) {
-        console.error("JWT Error: ", error);
+    }catch(err){
+        console.error(err);
         res.status(401).json({ error: 'Invalid token' });
     }
-};
+}
 
-// Function to generate a JWT token
+
+// Function to generate JWT token
 const generateToken = (userData) => {
-    return jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '1h' }); // Token valid for 1 hour
-};
+    // Generate a new JWT token using user data
+    return jwt.sign(userData, process.env.JWT_SECRET, {expiresIn: 30000});
+}
 
-module.exports = { jwtAuthMiddleware, generateToken };
+module.exports = {jwtAuthMiddleware, generateToken};

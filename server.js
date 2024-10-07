@@ -1,27 +1,21 @@
-const express = require('express');
+const express = require('express')
 const app = express();
-require('dotenv').config(); // Load environment variables
-const connectDB = require('./config/db')
+const db = require('./db');
+require('dotenv').config();
 
-const bodyParser = require('body-parser');
-app.use(bodyParser.json()); // Middleware for parsing JSON
-
+const bodyParser = require('body-parser'); 
+app.use(bodyParser.json()); // req.body
 const PORT = process.env.PORT || 3000;
 
-const jwt = (jwtAuthMiddleware) = require('./jwt')
+// Import the router files
+const userRoutes = require('./routes/userRoutes');
+const candidateRoutes = require('./routes/candidateRoutes');
 
-connectDB();
-
-// Import user routes
-const userRoutes = require('./routes/user.routes');
-const candidateRoutes = require('./routes/candidate.routes');
-
-
-// Use the imported routes
+// Use the routers
 app.use('/user', userRoutes);
 app.use('/candidate', candidateRoutes);
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
+app.listen(PORT, ()=>{
+    console.log('listening on port 3000');
+})
